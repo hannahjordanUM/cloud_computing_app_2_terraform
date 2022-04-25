@@ -31,8 +31,9 @@ variable "rest_api_stage_name" {
     default     = "prod" # add a stage name as per your requirement
 }
 
-
+/*
 variable "cognito_user_pool_arn" {
     description = "arn of user pool"
     type = string
 } # from main.tf
+*/
