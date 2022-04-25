@@ -1,10 +1,11 @@
 module "lambda_function" {
   source = "./modules/lambda_function"
 }
-
+/*
 module "cognito" {
   source = "./modules/cognito"
 }
+*/
 
 module "api_gateway" {
   source                 = "./modules/api_gateway"
@@ -13,25 +14,14 @@ module "api_gateway" {
   lambda_function_name   = module.lambda_function.lambda_function_name
   lambda_function_arn    = module.lambda_function.lambda_function_arn
 
-  cognito_user_pool_arn = module.cognito.cognito_user_pool_arn
+  #cognito_user_pool_arn = module.cognito.cognito_user_pool_arn
 
   depends_on = [
     module.lambda_function
   ]
 }
 
-
-/*
-resource "aws_dynamodb_table" "my_first_table" {
-  name = "${var.table_name}"
-  billing_mode = "${var.billing_mode}"
-  hash_key = "employee-id"
-  attribute {
-    name = "employee-id"
-    type = "S"
-  }
-  tags = {
-    environment = "${var.environment}"
-  }
+module "dynamo_db" {
+  source = "./modules/dynamo_db"
+  db_table_name = "test_db"
 }
-*/

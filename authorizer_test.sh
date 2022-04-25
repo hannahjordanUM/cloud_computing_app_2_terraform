@@ -3,11 +3,11 @@
 set -eux
 
 #assign credentials to variables
-CLIENT_ID=4tg4f4uc30rsd2dt3dht3q5ef0
-USER_POOL_ID=us-west-2_omASq4AvN
-USERNAME=hannah3ban3@gmail.com
+CLIENT_ID=6shgrfpt9dqjs1fj8cc3ll13b7
+USER_POOL_ID=us-west-2_AHR3vWATf
+USERNAME=test1@gmail.com
 PASSWORD=testPassword1!
-URL=https://tdqaltqqa7.execute-api.us-west-2.amazonaws.com/prod/movies
+URL=https://amyakvtvye.execute-api.us-west-2.amazonaws.com/prod/movies
 #sign-up user:
 aws cognito-idp sign-up \
  --client-id ${CLIENT_ID} \
