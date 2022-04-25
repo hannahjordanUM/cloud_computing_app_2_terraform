@@ -27,8 +27,8 @@ resource "aws_lambda_function" "lambda_function" {
     function_name = var.lambda_function_name
     s3_bucket = aws_s3_bucket.lambda_bucket.id
     s3_key = aws_s3_object.lambda_code.key
-    runtime = "nodejs12.x"
-    handler = "index.handler"
+    runtime = "python3.8" #"nodejs12.x"
+    handler = "index.lambda_handler" #"index.handler"
     source_code_hash = data.archive_file.lambda_code.output_base64sha256
     role = aws_iam_role.lambda_execution_role.arn
 }
@@ -53,6 +53,7 @@ resource "aws_iam_role" "lambda_execution_role" {
         }]
     })
 }
+
 
 resource "aws_iam_role_policy_attachment" "lambda_policy" {
     role = aws_iam_role.lambda_execution_role.name

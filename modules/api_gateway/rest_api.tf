@@ -12,10 +12,14 @@ resource "aws_api_gateway_resource" "rest_api_resource" {
 }
 
 resource "aws_api_gateway_method" "rest_api_get_method" {
-    rest_api_id = aws_api_gateway_rest_api.rest_api.id
-    resource_id = aws_api_gateway_resource.rest_api_resource.id
-    http_method = "GET"
-    authorization = "NONE"
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  resource_id   = aws_api_gateway_resource.rest_api_resource.id
+  http_method   = "GET"
+  authorization = "NONE" #"COGNITO_USER_POOLS"
+  #authorizer_id = aws_api_gateway_authorizer.api_authorizer.id
+  #request_parameters = {
+    #"method.request.path.proxy" = true
+  #}
 }
 
 # creates a mock backend to test GET /movies 
@@ -63,3 +67,12 @@ resource "aws_api_gateway_stage" "rest_api_stage" {
     rest_api_id = aws_api_gateway_rest_api.rest_api.id
     stage_name = var.rest_api_stage_name
 }
+
+/*
+resource "aws_api_gateway_authorizer" "api_authorizer" {
+  name          = "CognitoUserPoolAuthorizer"
+  type          = "COGNITO_USER_POOLS"
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  provider_arns = [var.cognito_user_pool_arn]
+}
+*/
