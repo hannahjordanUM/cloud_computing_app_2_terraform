@@ -21,7 +21,7 @@ To initialize API Gateway:
 
 ADD:
 - under Actions, click Create Resource: name = add, check Enable API Gateway CORS, create
-- with add selected, click create method under actions, select PUT and the checkmark
+- with add selected, click create method under actions, with /add selected, select PUT and the checkmark
 - make sure lambda function is selected, lambda proxy integration is not checked, and start typing addItem for Lambda Function, click save and ok
 - test that it is working by selecting the lightning bolt test: enter 
 {
@@ -32,8 +32,8 @@ ADD:
 for request body. The response should have a status code of 200 and body = Success. To check that this worked with the database, go to DynamoDB in the console and look for the table named cloud-class-inventory-app-table. There should be an item with the above specifications.
 
 DELETE:
-- - under Actions, click Create Resource: name = delete, check Enable API Gateway CORS, create
-- with add selected, click create method under actions, select DELETE and the checkmark
+- with the very top / selected (don't want to have add selected), under Actions, click Create Resource: name = delete, check Enable API Gateway CORS, create
+- with add selected, click create method under actions with /delete selected, select DELETE and the checkmark
 - make sure lambda function is selected, lambda proxy integration is not checked, and start typing deleteItem for Lambda Function, click save and ok
 - test that it is working by selecting the lightning bolt test: enter 
 {
