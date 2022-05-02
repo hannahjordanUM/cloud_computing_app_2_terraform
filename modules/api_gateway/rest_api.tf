@@ -8,38 +8,33 @@ resource "aws_api_gateway_rest_api" "rest_api" {
 resource "aws_api_gateway_resource" "rest_api_resource" {
     rest_api_id = aws_api_gateway_rest_api.rest_api.id
     parent_id = aws_api_gateway_rest_api.rest_api.root_resource_id
-    path_part = "movies"
+    path_part = "add"
 }
 
-resource "aws_api_gateway_method" "rest_api_get_method" {
+resource "aws_api_gateway_method" "rest_add_item" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   resource_id   = aws_api_gateway_resource.rest_api_resource.id
-  http_method   = "GET"
+  http_method   = "PUT"
   authorization = "NONE" #"COGNITO_USER_POOLS"
-  #authorizer_id = aws_api_gateway_authorizer.api_authorizer.id
-  #request_parameters = {
-    #"method.request.path.proxy" = true
-  #}
 }
 
-# creates a mock backend to test GET /movies 
-resource "aws_api_gateway_integration" "rest_api_get_method_integration" {
+# connect to lambda function
+resource "aws_api_gateway_integration" "rest_add_item_integration" {
     rest_api_id = aws_api_gateway_rest_api.rest_api.id
     resource_id = aws_api_gateway_resource.rest_api_resource.id
-    http_method = aws_api_gateway_method.rest_api_get_method.http_method
-    integration_http_method = "POST"
+    http_method = aws_api_gateway_method.rest_add_item.http_method
+    integration_http_method = "PUT"
     type = "AWS_PROXY"
-    uri = var.lambda_function_arn
+    uri = var.lambda_function_add_arn
 }
 
-resource "aws_api_gateway_method_response" "rest_api_get_method_response_200"{
+resource "aws_api_gateway_method_response" "rest_add_item_response"{
     rest_api_id = aws_api_gateway_rest_api.rest_api.id
     resource_id = aws_api_gateway_resource.rest_api_resource.id
-    http_method = aws_api_gateway_method.rest_api_get_method.http_method
+    http_method = aws_api_gateway_method.rest_add_item.http_method
     status_code = "200"
 }
 
-# integration response
 
 
 # creating a lambda resource based policy to allow API gateway to invoke the lambda function
@@ -48,16 +43,17 @@ resource "aws_lambda_permission" "api_gateway_lambda" {
     action = "lambda:InvokeFunction"
     function_name = var.lambda_function_name
     principal = "apigateway.amazonaws.com"
-    source_arn = "arn:aws:execute-api:${var.api_gateway_region}:${var.api_gateway_account_id}:${aws_api_gateway_rest_api.rest_api.id}/*/${aws_api_gateway_method.rest_api_get_method.http_method}${aws_api_gateway_resource.rest_api_resource.path}"
+    source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/*/*"
 }
 
 resource "aws_api_gateway_deployment" "rest_api_deployment" {
     rest_api_id = aws_api_gateway_rest_api.rest_api.id
+
     triggers = {
         redeployment = sha1(jsonencode([
             aws_api_gateway_resource.rest_api_resource.id,
-            aws_api_gateway_method.rest_api_get_method.id,
-            aws_api_gateway_integration.rest_api_get_method_integration.id
+            aws_api_gateway_method.rest_add_item.id,
+            aws_api_gateway_integration.rest_add_item_integration.id
         ]))
     }
 }
@@ -75,4 +71,4 @@ resource "aws_api_gateway_authorizer" "api_authorizer" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   provider_arns = [var.cognito_user_pool_arn]
 }
-*/
+*/ 

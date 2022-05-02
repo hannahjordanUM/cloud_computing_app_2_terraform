@@ -19,7 +19,7 @@ variable "lambda_function_name" {
     type        = string
 } # value comes from main.tf
 
-variable "lambda_function_arn" {
+variable "lambda_function_add_arn" {
     description = "The ARN of the Lambda function"
     type        = string
 } # value comes from main.tf

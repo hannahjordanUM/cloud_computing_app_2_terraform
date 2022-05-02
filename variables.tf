@@ -7,7 +7,7 @@ variable "region" {
 variable "table_name" {
   description = "Table name"
   type        = string
-  default     = "my-first-test-table"
+  default     = "cloud-class-inventory-app-table"
 }
 
 variable "billing_mode" {
@@ -24,5 +24,5 @@ variable "environment" {
 variable "account_id" {
   description = "aws access key"
   type        = string
-  # default = "" # uncomment and fill this in with your account id from aws for quicker testing: otherwise just enter it upon apply
+  default     = "142655259902" # uncomment and fill this in with your account id from aws for quicker testing: otherwise just enter it upon apply
 }

@@ -23,23 +23,33 @@ resource "aws_s3_object" "lambda_code" {
     etag = filemd5(data.archive_file.lambda_code.output_path)
 }
 
-resource "aws_lambda_function" "lambda_function" {
-    function_name = var.lambda_function_name
+resource "aws_lambda_function" "lambda_function_add" {
+    function_name = "addItem"
     s3_bucket = aws_s3_bucket.lambda_bucket.id
     s3_key = aws_s3_object.lambda_code.key
     runtime = "python3.8" #"nodejs12.x"
-    handler = "index.lambda_handler" #"index.handler"
+    handler = "add/index.lambda_handler" #"index.handler"
+    source_code_hash = data.archive_file.lambda_code.output_base64sha256
+    role = aws_iam_role.lambda_execution_role.arn
+}
+
+resource "aws_lambda_function" "lambda_function_delete" {
+    function_name = "deleteItem"
+    s3_bucket = aws_s3_bucket.lambda_bucket.id
+    s3_key = aws_s3_object.lambda_code.key
+    runtime = "python3.8" #"nodejs12.x"
+    handler = "delete/index.lambda_handler" #"index.handler"
     source_code_hash = data.archive_file.lambda_code.output_base64sha256
     role = aws_iam_role.lambda_execution_role.arn
 }
 
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
-    name = "/aws/lambda/${aws_lambda_function.lambda_function.function_name}"
+    name = "/aws/lambda/${aws_lambda_function.lambda_function_add.function_name}"
     retention_in_days = 30
 }
 
 resource "aws_iam_role" "lambda_execution_role" {
-    name = "lambda_execution_role_${var.lambda_function_name}"
+    name = "lambda_execution_role_cloud_app_2"
 
     assume_role_policy = jsonencode({
         Version = "2012-10-17"
@@ -58,4 +68,20 @@ resource "aws_iam_role" "lambda_execution_role" {
 resource "aws_iam_role_policy_attachment" "lambda_policy" {
     role = aws_iam_role.lambda_execution_role.name
     policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+
+resource "aws_iam_role_policy" "dynamodb-lambda-policy" {
+   name = "dynamodb_lambda_policy"
+   role = aws_iam_role.lambda_execution_role.id
+   policy = jsonencode({
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+           "Effect" : "Allow",
+           "Action" : ["dynamodb:*"],
+           "Resource" : "${var.dynamo_db_arn}"
+        }
+      ]
+   })
 }

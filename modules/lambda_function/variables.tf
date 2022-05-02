@@ -9,3 +9,8 @@ variable "lambda_function_name" {
     description = "name of lambda function"
     default = "MovieLambda"
 }
+
+variable "dynamo_db_arn" {
+    type = string
+    description = "dynamodb table arn"
+} #from main.tf
