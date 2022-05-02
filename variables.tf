@@ -24,5 +24,5 @@ variable "environment" {
 variable "account_id" {
   description = "aws access key"
   type        = string
-  default     = "142655259902" # uncomment and fill this in with your account id from aws for quicker testing: otherwise just enter it upon apply
+ # default     = "" # uncomment and fill this in with your account id from aws for quicker testing: otherwise just enter it upon apply
 }
