@@ -41,8 +41,11 @@ DELETE:
 }
 for request body. The response should have a status code of 200 and body = Success. Go to table, the item you added before should be deleted.
 
+- Enable CORS: I'm not sure why it doesn't work, but you have to enable cors once the resources are set. to do so: select /add, under actions click enable CORS, select the blue button. Do the same for /delete and any other resources you've made. Then you can deploy.
 
 - Deploy API: under actions select Deploy API: select new stage as deployment, name it dev and press deploy
 - copy the invoke URL
+
+
 
 Input the invoke URL into your Javascript fetch() calls, for the example on HannahsBranch, index.html is calling the /add resource, so just paste your api url and add the /add to the end. https://..../dev/add --> just added /add. It should work on both amplify and on your local machine.
